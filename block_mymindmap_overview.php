@@ -113,8 +113,7 @@ class block_mymindmap_overview extends block_base {
 
             $idcourse = (!empty($course->idnumber)) ? $course->idnumber : $course->fullname;
             $nb_modules = (($nbcmod > 0 || $course->format == 'social') && $course->format != 'singleactivity') ? ($nbcmod + 1) : $nbcmod;
-            $suffixe = (strstr($course->fullname,'2018-2019 - ') && !strstr($course->fullname,'- phase')) ? strstr(str_replace('2018-2019 - ','',$course->fullname), ' - ') : '----';
-            $lecours = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace($suffixe,'',str_replace('2018-2019 - ',' ',str_replace('"',' - ',$course->fullname)));
+            $lecours = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace('"',' - ',$course->fullname);
             $content1 = '
             {"id":"'.$idcourse.'","topic":"<a href='.
             '../course/view.php?id='.$course->id.' title=\"'.
@@ -280,7 +279,8 @@ class block_mymindmap_overview extends block_base {
          }';
        }
        $hauteur = 450+($nbactual * 65);
-       $this->content->text .= html_writer::div('<div style="height:35px;"><div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
+       $this->content->text .= html_writer::div('<div style="height:35px;">'.
+                                                 '<div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
                                                  'onclick="$(document).ready(function(){'.
                                                  '$(\'#jsmind_container\').toggle();'.
                                                  '$(\'#jsmind_container\').html(\'\');'.
