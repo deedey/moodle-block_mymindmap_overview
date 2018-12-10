@@ -273,7 +273,7 @@ class block_mymindmap_overview extends block_base {
          ]}
          }';
        }
-       $hauteur = 450+($nbactual * 65);
+       $hauteur = ($nbactual > 0) ? 450+($nbactual * 65) : 600;
        $this->content->text .= html_writer::div('<div style="height:35px;">'.
                                                  '<div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
                                                  'onclick="$(document).ready(function(){'.
