@@ -141,12 +141,15 @@ class block_mymindmap_overview extends block_base {
                    $nb_modtot = count($modseq);
                    for ($a=0;$a < $nb_modtot; $a++)
                    {
-                      $modvalable[$a] = $DB->get_field('course_modules', 'deletioninprogress', array('id' => $modseq[$a]));
-                      $modvisible[$a] = $DB->get_field('course_modules', 'visible', array('id' => $modseq[$a]));
-                      if ($modvalable[$a] == 1 || $modvisible[$a] == 0)
-                      {
-                         unset($modseq[$a]);
-                      }
+                     if ($rolecourse == 0)
+                     {
+                        $modvalable[$a] = $DB->get_field('course_modules', 'deletioninprogress', array('id' => $modseq[$a]));
+                        $modvisible[$a] = $DB->get_field('course_modules', 'visible', array('id' => $modseq[$a]));
+                        if ($modvalable[$a] == 1 || $modvisible[$a] == 0)
+                        {
+                            unset($modseq[$a]);
+                        }
+                     }
                    }
                    $modseq = array_values($modseq);
                    $nb_mod = count($modseq);
