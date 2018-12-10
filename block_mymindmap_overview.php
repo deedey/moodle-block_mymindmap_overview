@@ -246,15 +246,9 @@ class block_mymindmap_overview extends block_base {
                       ]}';
               }
             }
-            if ($nbactual == $totactual && $totactual > 0 && (($nbpassed == $totpassed && $nbpassed > 0) ||  $totpassed == 0))
+            if(($is_actual == 1 && $nbactual < $totactual && $totactual > 0) || ($is_passed == 1 && $nbpassed < $totpassed && $totpassed > 0))
                 $content1 .= '
-                ]}';
-            elseif(($is_actual == 1 && $nbactual < $totactual && $totactual > 0) || ($is_passed == 1 && $nbpassed < $totpassed && $totpassed > 0))
-                $content1 .= '
-                ]},';
-            elseif ($is_passed == 1 && $nbpassed == $totpassed && $totpassed > 0 && (($nbactual == $totactual && $totactual > 0) || $totactual == 0))
-                $content1 .= '
-                ]}';
+                   ]},';
             if ($is_passed == 1 && $nbpassed == 1 && $totactual > 0)
                   $passed .=',{"id":"passed","topic":"<span style=\"font-weight:bold;font-size:14px;\">('.
                   $totpassed.') '.get_string('mymindmap_past','block_mymindmap_overview').'</span>'.
@@ -268,11 +262,12 @@ class block_mymindmap_overview extends block_base {
             elseif (($course->enddate < time() &&  $course->enddate > 0) && $course->startdate < time())
                   $passed .= $content1;
          }
-         if ($nbactual > 0 && $nbpassed > 0)
+         if ($nbactual > 0)
             $content .= $actual.'
-            ]}';;
+               ]}';
          if ($nbpassed > 0)
             $content .= $passed.'
+               ]}
             ]}';
          $content .= '
          ]}
