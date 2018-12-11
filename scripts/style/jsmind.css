@@ -37,8 +37,8 @@ jmexpander{position:absolute;width:12px;height:12px;display:block;overflow:hidde
 jmnode{padding:10px;background-color:#fff;color:#000;border-radius:5px;box-shadow:1px 1px 1px #666;font:12px/1.125 Verdana,Arial,Helvetica,sans-serif;}
 jmnode:hover{box-shadow:2px 2px 8px #000;background-color:#bfe1f2;color:#000;}
 jmnode.selected{background-color:#aac4a9;color:#000;box-shadow:2px 2px 8px #000;}
-jmnode.root{font-size:20px;color:#000;}
-jmnode.root:hover{color:#000;}
+jmnode.root{font-size:18px;color:#fff;background-color:#428bca;box-shadow:2px 2px 8px #000;}
+jmnode.root:hover{color:#000;box-shadow:2px 2px 8px #000;background-color:#bfe1f2;}
 jmexpander{border-color:000;font-weight:bold;font-size:14px;}
 jmexpander:hover{border-color:red;background-color:#f4f4f4;}
 
