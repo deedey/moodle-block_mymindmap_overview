@@ -253,11 +253,11 @@ class block_mymindmap_overview extends block_base {
                 $content1 .= '
                    ]},';
             if ($is_passed == 1 && $nbpassed == 1 && $totactual > 0)
-                  $passed .=',{"id":"passed","topic":"<span style=\"font-weight:bold;font-size:14px;\">('.
+                  $passed .=',{"id":"passed","topic":"<span style=\"font-size:16px;\">('.
                   $totpassed.') '.get_string('mymindmap_past','block_mymindmap_overview').'</span>'.
                   '","direction":"right","expanded":false,"children":[';
             elseif ($is_passed == 1 && $nbpassed == 1 && $totactual == 0)
-                  $passed .='{"id":"passed","topic":"<span style=\"font-weight:bold;font-size:14px;\">('.
+                  $passed .='{"id":"passed","topic":"<span style=\"font-size:16px;\">('.
                   $totpassed.')>'.get_string('mymindmap_past','block_mymindmap_overview').'</span>'.
                   '","direction":"right","expanded":true,"children":[';
             if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time())
