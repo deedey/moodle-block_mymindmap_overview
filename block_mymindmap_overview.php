@@ -47,7 +47,7 @@ class block_mymindmap_overview extends block_base {
         $actual = '';$nbactual = 0;$totactual=0;
         $content = '{
         "meta":{
-            "name":"Mindmind Courses",
+            "name":"Mindmap Courses",
             "author":"hizzgdev@163.com",
             "version":"0.2"
         },
