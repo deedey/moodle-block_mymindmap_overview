@@ -43,7 +43,6 @@ class block_mymindmap_overview extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
         $passed = '';$nbpassed = 0;$totpassed=0;
-        $future = '';$nbfuture = 0;$totfuture=0;
         $actual = '';$nbactual = 0;$totactual=0;
         $content = '{
         "meta":{
