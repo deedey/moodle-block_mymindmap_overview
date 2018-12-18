@@ -54,7 +54,6 @@ class block_mymindmap_overview extends block_base {
         "data":{"id":"root","topic":"'.get_string('mymindmap_mine','block_mymindmap_overview').'","children":[';
         $courses = enrol_get_all_users_courses($USER->id, $onlyactive = false, $fields = 'format,enddate,newsitems', $sort = 'c.fullname ASC,visible DESC,sortorder ASC');
         $nbr_courses = count($courses);
-        $newidcourse = 0;
         $numcourse = 1;
         $courseskip = 0;
         if ($nbr_courses > 0)
@@ -95,7 +94,6 @@ class block_mymindmap_overview extends block_base {
                 $rolecourse = 1;
             else
                 $rolecourse = 0;
-            $course_visible = $course->visible;
             $numcourse++;
             if ($course->visible == 0)
             {
@@ -123,7 +121,6 @@ class block_mymindmap_overview extends block_base {
            $sections = ($rolecourse == 0) ? $DB->get_records_sql($sql, array( $course->id,1,'')) :  $DB->get_records_sql($sql, array( $course->id,''));
            $nbr_seq =count($sections);
            $newseq = 0;
-           $virgulesection = '';
            $modseq = array();
            if ($nbcmod > 0 || $course->format == 'social')
            {
