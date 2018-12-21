@@ -23,6 +23,7 @@ $string['pluginname'] = 'My mindmap overview';
 $string['mymindmap_overview'] = 'My mindmap overview';
 $string['mymindmap_overview:addinstance'] = 'Add a block My mindmap overview';
 $string['mymindmap_openit'] = 'Open/Close my Mindmap Overview';
+$string['mymindmap_howto'] = 'To navigate the mindmap easily, click on the mouse wheel';
 $string['mymindmap_withoutname'] = 'Nonamed section';
 $string['mymindmap_restriction'] = ' *** Restricted';
 $string['mymindmap_mine'] = 'In progress courses';
