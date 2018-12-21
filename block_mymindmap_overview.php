@@ -283,7 +283,8 @@ class block_mymindmap_overview extends block_base {
                                                  '$(\'#jsmind_container\').toggle();'.
                                                  '$(\'#jsmind_container\').html(\'\');'.
                                                  '$(\'#jsmind_container\').css(\'height\',\''.$hauteur.'px\');'.
-                                                 'load_jsmind('.htmlentities($content).');})">'.
+                                                 'load_jsmind('.htmlentities($content).');})" title= "'.
+                                                  get_string('mymindmap_howto','block_mymindmap_overview').'">'.
                                                   get_string('mymindmap_openit','block_mymindmap_overview').'</div></div>'.
                                                  '<div id="jsmind_container" style="display:none;"></div>');
        $this->content->footer = '';
