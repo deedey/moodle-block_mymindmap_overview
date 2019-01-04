@@ -37,6 +37,8 @@ class block_mymindmap_overview extends block_base {
         }
 
         $PAGE->requires->css('/blocks/mymindmap_overview/scripts/style/jsmind.css',true);
+        $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jquery-3.2.1.min.js',true);
+        $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/drag-on.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.launcher.js',true);
         $this->content = new stdClass();
@@ -286,7 +288,7 @@ class block_mymindmap_overview extends block_base {
                                                  'load_jsmind('.htmlentities($content).');})" title= "'.
                                                   get_string('mymindmap_howto','block_mymindmap_overview').'">'.
                                                   get_string('mymindmap_openit','block_mymindmap_overview').'</div></div>'.
-                                                 '<div id="jsmind_container" style="display:none;"></div>');
+                                                 '<div id="jsmind_container" style="display:none;" class="dragon"></div>');
        $this->content->footer = '';
        return $this->content;
     }
