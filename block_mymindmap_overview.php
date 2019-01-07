@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @based on jsmind  project -2014-2016 hizzgdev@163.com
  * @jsmind Project Home: https://github.com/hizzgdev/jsmind/
+ * dragOn jQuery plugin by Dark Heart aka PretorDH @site dragon.deparadox.com
+ * Project Home : https://github.com/PretorDH/Dragon
  */
 defined('MOODLE_INTERNAL') || die();
 class block_mymindmap_overview extends block_base {
