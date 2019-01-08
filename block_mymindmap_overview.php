@@ -281,15 +281,33 @@ class block_mymindmap_overview extends block_base {
        }
        $hauteur = ($nbactual > 0) ? 450+($nbactual * 65) : 600;
        $this->content->text .= html_writer::div('<div style="height:35px;">'.
-                                                 '<div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
+                                                 '<button id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
                                                  'onclick="$(document).ready(function(){'.
                                                  '$(\'#jsmind_container\').toggle();'.
                                                  '$(\'#jsmind_container\').html(\'\');'.
                                                  '$(\'#jsmind_container\').css(\'height\',\''.$hauteur.'px\');'.
                                                  'load_jsmind('.htmlentities($content).');});'.
-                                                 '$(\'#jsmind_container\').dragOn;" title= "'.
+                                                 '$(\'#jsmind_container\').dragOn;"  title="'.
                                                   get_string('mymindmap_howto','block_mymindmap_overview').'">'.
-                                                  get_string('mymindmap_openit','block_mymindmap_overview').'</div></div>'.
+                                                  get_string('mymindmap_openit','block_mymindmap_overview').'</button>'.
+                                                 '<button id="expander" class="btn btn-default" style="float:left;margin-left:20px;" '.
+                                                 'onclick="$(document).ready(function(){'.
+                                                 '$(\'#jsmind_container\').show();'.
+                                                 '$(\'#jsmind_container\').html(\'\');'.
+                                                 '$(\'#jsmind_container\').css(\'height\',\'1080px\');'.
+                                                 'expander('.htmlentities($content).');});'.
+                                                 '$(\'#jsmind_container\').dragOn;" title= "'.
+                                                  get_string('mymindmap_expand','block_mymindmap_overview').'">'.
+                                                  get_string('mymindmap_expand_all','block_mymindmap_overview').'</button>'.
+                                                 '<button id="collapser" class="btn btn-default" style="float:left;margin-left:20px;" '.
+                                                 'onclick="$(document).ready(function(){'.
+                                                 '$(\'#jsmind_container\').show();'.
+                                                 '$(\'#jsmind_container\').html(\'\');'.
+                                                 '$(\'#jsmind_container\').css(\'height\',\''.$hauteur.'px\');'.
+                                                 'collapse('.htmlentities($content).');});'.
+                                                 '$(\'#jsmind_container\').dragOn;" title= "'.
+                                                  get_string('mymindmap_collapse','block_mymindmap_overview').'">'.
+                                                  get_string('mymindmap_collapse_all','block_mymindmap_overview').'</button></div>'.
                                                  '<div id="jsmind_container" style="display:none;" class="dragon"></div>');
        $this->content->footer = '';
        return $this->content;
