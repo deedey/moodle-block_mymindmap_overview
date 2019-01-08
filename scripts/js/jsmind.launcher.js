@@ -28,4 +28,26 @@ function load_jsmind(text){
             theme:'default'
         }
         var jm = jsMind.show(options,mind);
-   }
+}
+function expander(text){
+        var mind =  decodeHTMLEntities(text);
+
+        var options = {
+            container:'jsmind_container',
+            editable:true,
+            theme:'default'
+        }
+        var jm = jsMind.show(options,mind);
+        jm.expand_all(mind);
+}
+function collapse(text){
+        var mind =  decodeHTMLEntities(text);
+
+        var options = {
+            container:'jsmind_container',
+            editable:true,
+            theme:'default'
+        }
+        var jm = jsMind.show(options,mind);
+        jm.collapse_all(mind);
+}
