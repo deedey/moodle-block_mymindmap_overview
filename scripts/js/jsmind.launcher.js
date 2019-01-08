@@ -24,7 +24,6 @@ function load_jsmind(text){
 
         var options = {
             container:'jsmind_container',
-            editable:true,
             theme:'default'
         }
         var jm = jsMind.show(options,mind);
@@ -34,7 +33,6 @@ function expander(text){
 
         var options = {
             container:'jsmind_container',
-            editable:true,
             theme:'default'
         }
         var jm = jsMind.show(options,mind);
@@ -45,7 +43,6 @@ function collapse(text){
 
         var options = {
             container:'jsmind_container',
-            editable:true,
             theme:'default'
         }
         var jm = jsMind.show(options,mind);
