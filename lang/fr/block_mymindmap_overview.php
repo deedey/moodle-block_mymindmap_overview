@@ -22,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Carte heuristique de mes cours';
 $string['mymindmap_overview'] = 'Carte heuristique de mes cours';
 $string['mymindmap_overview:addinstance'] = 'Ajouter un block Mymindmap_overview';
+$string['mymindmap_nocourse'] = 'Aucun cours ne vous a &#233t&#233 affect&#233';
 $string['mymindmap_openit'] = 'Ouvrir/Fermer la carte heuristique de mes cours';
 $string['mymindmap_howto'] = 'Pour naviguer ais&#233ment dans la carte, cliquer sur le bouton gauche et d&#233placez le curseur';
 $string['mymindmap_expand'] = 'Tout d&#233ployer implique une plus grande carte heuristique navigable';
