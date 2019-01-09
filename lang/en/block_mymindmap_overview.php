@@ -22,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'My mindmap overview';
 $string['mymindmap_overview'] = 'My mindmap overview';
 $string['mymindmap_overview:addinstance'] = 'Add a block My mindmap overview';
+$string['mymindmap_nocourse'] = 'You have not any course right now';
 $string['mymindmap_openit'] = 'Open/Close my Mindmap Overview';
 $string['mymindmap_howto'] = 'To navigate the mindmap easily, click on the mouse left button and move';
 $string['mymindmap_expand'] = 'Expand All gives you u very large mindmap';
