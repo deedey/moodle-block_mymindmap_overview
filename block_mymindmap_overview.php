@@ -59,6 +59,7 @@ class block_mymindmap_overview extends block_base {
         $nbr_courses = count($courses);
         $numcourse = 1;
         $courseskip = 0;
+        $opened_passed = 'false';
         if ($nbr_courses > 0)
         {
           $opened_course = 0;
@@ -93,6 +94,7 @@ class block_mymindmap_overview extends block_base {
              elseif ($course->enddate < time() && $course->enddate != 0 && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
              {
                   $nbpassed++;
+                  if ($opened_course == $course->id) $opened_passed = 'true';
                   $is_actual = 0;
                   $is_passed = 1;
              }
@@ -265,11 +267,11 @@ class block_mymindmap_overview extends block_base {
             if ($is_passed == 1 && $nbpassed == 1 && $totactual > 0)
                   $passed .=',{"id":"passed","topic":"<span style=\"font-size:16px;\">('.
                   $totpassed.') '.get_string('mymindmap_past','block_mymindmap_overview').'</span>'.
-                  '","direction":"right","expanded":false,"children":[';
+                  '","direction":"right","expanded":provisional,"children":[';
             elseif ($is_passed == 1 && $nbpassed == 1 && $totactual == 0)
                   $passed .='{"id":"passed","topic":"<span style=\"font-size:16px;\">('.
                   $totpassed.')>'.get_string('mymindmap_past','block_mymindmap_overview').'</span>'.
-                  '","direction":"right","expanded":true,"children":[';
+                  '","direction":"right","expanded":provisional,"children":[';
             if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time())
                   $actual .= $content1;
             elseif (($course->enddate < time() &&  $course->enddate > 0) && $course->startdate < time())
@@ -285,6 +287,7 @@ class block_mymindmap_overview extends block_base {
          $content .= '
          ]}
          }';
+         $content = str_replace('provisional',$opened_passed,$content);
          $hauteur = ($nbactual > 0) ? 450+($nbactual * 65) : 600;
          $this->content->text .= html_writer::div('<div style="height:35px;">'.
                     '<button id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
