@@ -229,7 +229,7 @@ class block_mymindmap_overview extends block_base {
                              else
                                $is_membre = 1;
                              $compteur++;
-                             $modnom = str_replace('"','-',$modnom);
+                             $modnom = addslashes(str_replace('"','-',$modnom));
                              $virgule = ($nb_mod > $compteur) ? ',' : '';
                              if (file_exists($CFG->dirroot.'/mod/'.$module.'/pix/icon.gif'))
                                  $icon = '<img height="18" widht="18" style="margin-right:5px;" src="'.$CFG->wwwroot.'/mod/'.$module.'/pix/icon.gif" />';
@@ -238,13 +238,13 @@ class block_mymindmap_overview extends block_base {
                               if ($is_membre == 0)
                                  $content1 .= '
                                  {"id":"module'.$record->id.'-'.$newseq.'-'.$course->id.'-'.$i.'","topic":"'.addslashes($icon).'  '.
-                                 addslashes(preg_replace("#\n|\t|\r#",'',$modnom)).
+                                 preg_replace("#\n|\t|\r#",'',$modnom).
                                  get_string('mymindmap_restriction','block_mymindmap_overview').'"}'.$virgule;
                              else
                                  $content1 .= '
                                  {"id":"module'.$record->id.'-'.$newseq.'-'.$course->id.'-'.$i.
                                  '","topic":"'.addslashes($icon).'  <a href=../mod/'.$module.'/view.php?id='.$record->id.' title=\''.
-                                 addslashes(preg_replace("#\n|\t|\r#",'',$modnom)).'\'>'.
+                                 preg_replace("#\n|\t|\r#",'',str_replace("'"," ",$modnom)).'\'>'.
                                  preg_replace("#\n|\t|\r#",'',$modnom).'</a>"}'.$virgule;
                          }
                      }
