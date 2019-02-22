@@ -24,12 +24,17 @@
  * @jsmind Project Home: https://github.com/hizzgdev/jsmind/
  * dragOn jQuery plugin Project Home : https://github.com/PretorDH/Dragon
  */
+
 defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot.'/blocks/mymindmap_overview/lib.php');
+
 class block_mymindmap_overview extends block_base {
+
     public function init() {
         $this->title = get_string('pluginname', 'block_mymindmap_overview');
     }
-
+ 
     public function get_content() {
         global $USER, $DB, $CFG,$PAGE ;
 
@@ -42,19 +47,13 @@ class block_mymindmap_overview extends block_base {
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/drag-on.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.launcher.js',true);
+
         $this->content = new stdClass();
         $this->content->text = '';
         $this->content->footer = '';
         $passed = '';$nbpassed = 0;$totpassed=0;
         $actual = '';$nbactual = 0;$totactual=0;
-        $content = '{
-        "meta":{
-            "name":"Mindmap Courses",
-            "author":"hizzgdev@163.com",
-            "version":"0.2"
-        },
-        "format":"node_tree",
-        "data":{"id":"root","topic":"'.get_string('mymindmap_mine','block_mymindmap_overview').'","children":[';
+        $content = mymindmap_overview_content_base();
         $courses = enrol_get_all_users_courses($USER->id, $onlyactive = false, $fields = 'format,enddate,newsitems', $sort = 'c.fullname ASC,visible DESC,sortorder ASC');
         $nbr_courses = count($courses);
         $numcourse = 1;
@@ -62,18 +61,7 @@ class block_mymindmap_overview extends block_base {
         $opened_past = 'false';
         if ($nbr_courses > 0)
         {
-          $opened_course = 0;
-          $sql = 'SELECT * FROM {logstore_standard_log} WHERE ';
-          $sql .= 'action = ?  AND target = ? AND userid = ? ';
-          $sql .= 'order by timecreated desc';
-          $lastcourse = $DB->get_records_sql($sql, array('viewed', 'course', $USER->id));
-          $cx = 0;
-          foreach ($lastcourse as $mycourse) {
-            if ($cx > 0)
-                    break;
-            $opened_course = $mycourse->courseid;
-            $cx++;
-          }
+          $opened_course = mymindmap_overview_last_course();
           foreach ($courses as $course)
           {
              $nbcmod = $DB->count_records_select('course_modules','module != 9 AND course = '.$course->id, array ('course'=>$course->id));
@@ -100,12 +88,7 @@ class block_mymindmap_overview extends block_base {
              }
             if ($nbcmod == 0 && $course->format != 'social')
                 continue;
-            if (user_has_role_assignment($USER->id, 1) ||
-                user_has_role_assignment($USER->id, 3) ||
-                user_has_role_assignment($USER->id, 4))
-                $rolecourse = 1;
-            else
-                $rolecourse = 0;
+            $rolecourse = mymindmap_overview_my_role_course($course);
             $numcourse++;
             if ($course->visible == 0)
             {
@@ -113,32 +96,32 @@ class block_mymindmap_overview extends block_base {
                continue;
             }
             if (($course->startdate < time() || $course->startdate == 0) && ($course->enddate < time() || $course->enddate > 0)){
-               $ajout = ',"direction" : "left","expanded" :false';
+               $to_add = ',"direction" : "left","expanded" :false';
             }else{
-               $ajout = '';
+               $to_add = '';
             }
             if ($opened_course == $course->id)
-               $ajout = ',"direction" : "left","expanded" :true';
+               $to_add = ',"direction" : "left","expanded" :true';
 
             $idcourse = (!empty($course->idnumber)) ? $course->idnumber : $course->fullname;
             $nb_modules = (($nbcmod > 0 || $course->format == 'social') && $course->format != 'singleactivity') ? ($nbcmod + 1) : $nbcmod;
-            $lecours = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace('"',' - ',$course->fullname);
+            $the_course = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace('"',' - ',$course->fullname);
             $content1 = '
             {"id":"'.$idcourse.'","topic":"<a href='.
             '../course/view.php?id='.$course->id.' title=\"'.
-            addslashes($course->fullname).'\n  '.$nb_modules.' ressources\">'.addslashes($lecours).'</a>"'.$ajout.',"children":[';
-           $sql = 'SELECT * FROM {course_sections} cs WHERE ';
-           $sql .= ($rolecourse == 0) ? 'cs.course = ? AND cs.visible = ? AND cs.sequence != ?' :  'cs.course = ?  AND cs.sequence != ?' ;
-           $sql .= 'ORDER BY section ASC';
-           $sections = ($rolecourse == 0) ? $DB->get_records_sql($sql, array( $course->id,1,'')) :  $DB->get_records_sql($sql, array( $course->id,''));
-           $nbr_seq =count($sections);
-           $newseq = 0;
-           $modseq = array();
-           if ($nbcmod > 0 || $course->format == 'social')
-           {
+            addslashes($course->fullname).'\n  '.$nb_modules.' ressources\">'.addslashes($the_course).'</a>"'.$to_add.',"children":[';
+            $sql = 'SELECT * FROM {course_sections} cs WHERE ';
+            $sql .= ($rolecourse == 0) ? 'cs.course = ? AND cs.visible = ? AND cs.sequence != ?' :  'cs.course = ?  AND cs.sequence != ?' ;
+            $sql .= 'ORDER BY section ASC';
+            $sections = ($rolecourse == 0) ? $DB->get_records_sql($sql, array( $course->id,1,'')) :  $DB->get_records_sql($sql, array( $course->id,''));
+            $nbr_seq =count($sections);
+            $newseq = 0;
+            $modseq = array();
+            if ($nbcmod > 0 || $course->format == 'social')
+            {
               foreach ($sections as $section)
               {
-                    $nomsection = ($section->name === NULL || trim(strip_tags($section->name)) == '') ? get_string('mymindmap_withoutname','block_mymindmap_overview') : addslashes($section->name);
+                    $section_name = ($section->name === NULL || trim(strip_tags($section->name)) == '') ? get_string('mymindmap_withoutname','block_mymindmap_overview') : addslashes($section->name);
                     if (strstr($section->sequence,','))
                        $modseq = explode(',',$section->sequence);
                     else
@@ -147,22 +130,10 @@ class block_mymindmap_overview extends block_base {
                        $modseq[] = $section->sequence;
                     }
                    $nb_modtot = count($modseq);
-                   for ($a=0;$a < $nb_modtot; $a++)
-                   {
-                     if ($rolecourse == 0)
-                     {
-                        $modvalable[$a] = $DB->get_field('course_modules', 'deletioninprogress', array('id' => $modseq[$a]));
-                        $modvisible[$a] = $DB->get_field('course_modules', 'visible', array('id' => $modseq[$a]));
-                        if ($modvalable[$a] == 1 || $modvisible[$a] == 0)
-                        {
-                            unset($modseq[$a]);
-                        }
-                     }
-                   }
-                   $modseq = array_values($modseq);
+                   $modseq = array_values(mymindmap_overview_mod_sections($nb_modtot,$course,$modseq));
                    $nb_mod = count($modseq);
                    $newidseq = 1;
-                   $compteur = 0;
+                   $counter = 0;
                    if ($nb_mod > 0)
                    {
                       for ($i=0;$i < $nb_mod; $i++)
@@ -170,7 +141,7 @@ class block_mymindmap_overview extends block_base {
                          if ($newidseq > 0)
                          {
                            $expanded = ($opened_course == $course->id && $newseq == 0) ? 'true' : 'false';
-                           $sectioname = '<span style=\"font-weight:bold;\">('.$nb_mod.')</span>  '.str_replace('"',"-",$nomsection);
+                           $sectioname = '<span style=\"font-weight:bold;\">('.$nb_mod.')</span>  '.str_replace('"',"-",$section_name);
                            $content1 .= '
                            {"id":"section'.$section->id.'-'.$newseq.'-'.$course->id.'","topic":"<a href='.
                                            '../course/view.php?id='.$course->id.'&sectionid='.$section->id.'#section-'.
@@ -184,70 +155,26 @@ class block_mymindmap_overview extends block_base {
                          foreach ($modules as $record)
                          {
                              $module = $DB->get_field('modules','name', array('id'=>$record->module), $strictness=IGNORE_MISSING);
-                             $modnom = $DB->get_field($module,'name', array('id'=>$record->instance), $strictness=IGNORE_MISSING);
-                             $context = context_module::instance($record->id);
-                             $valable = ($record->availability != '') ? json_decode($record->availability): NULL;
-                             $is_membre = 2;
-                             if ($valable != NULL && $rolecourse == 0)
-                             {
-                                $is_membre = 0;
-                                $is_group = 0; $is_grouping = 0; $is_date1 = 1; $is_date2 = 1; $is_complete = 1;
-                                $nbr_groups = count($valable->{'c'});
-                                for ($group = 0;$group < $nbr_groups;$group++)
-                                {
-                                    if (isset($valable->{'c'}[$group]->{'type'}) && $valable->{'c'}[$group]->{'type'} == 'group')
-                                    {
-                                        $user_group = count($DB->get_records_sql("SELECT * FROM {groups_members} WHERE ".
-                                             "groupid= ?  AND userid= ? ", array($valable->{'c'}[$group]->{'id'},$USER->id )));
-                                        if ($user_group > 0) $is_group = 1;
-                                    }
-                                    if (isset($valable->{'c'}[$group]->{'type'}) && $valable->{'c'}[$group]->{'type'} == 'grouping')
-                                    {
-                                        $user_group = count($DB->get_records_sql("SELECT * FROM {groupings_groups} as gg, {groups_members} as gm WHERE ".
-                                             "gm.groupid = gg.groupid AND gg.groupingid = ? AND gm.userid= ? ", array($valable->{'c'}[$group]->{'id'},$USER->id )));
-                                        if ($user_group > 0) $is_grouping = 1;
-                                    }
-                                    if (isset($valable->{'c'}[$group]->{'type'}) && $valable->{'c'}[$group]->{'type'} == 'completion')
-                                    {
-                                        $completion = count($DB->get_records_sql("SELECT * FROM {course_modules_completion} WHERE ".
-                                             "coursemoduleid= ?  AND completionstate= ?   AND userid= ? "
-                                             ,array($valable->{'c'}[$group]->{'cm'},$valable->{'c'}[$group]->{'e'},$USER->id )));
-                                        if ($completion == 0) $is_complete = 0;
-                                    }
-                                    if (isset($valable->{'c'}[$group]->{'type'}) && $valable->{'c'}[$group]->{'type'} == 'date')
-                                    {
-                                        if (isset($valable->{'c'}[$group]->{'d'}) && $valable->{'c'}[$group]->{'d'} == '<'){
-                                            if (time() > $valable->{'c'}[$group]->{'t'} && $rolecourse == 0) {$is_date1 = 0;break;};
-                                        }
-                                        if (isset($valable->{'c'}[$group]->{'d'}) && $valable->{'c'}[$group]->{'d'} == '>='){
-                                            if (time() < $valable->{'c'}[$group]->{'t'} && $rolecourse == 0) {$is_date2 = 0;break;};
-                                        }
-                                    }
-                                    if ((($is_group == 1 || $is_grouping == 1) && $is_complete == 1 &&
-                                       ($is_date1 == 1 && $is_date2 == 1)) || $rolecourse == 1)
-                                        $is_membre = 1;
-                                }
-                             }
-                             else
-                               $is_membre = 1;
-                             $compteur++;
-                             $modnom = addslashes(str_replace('"','-',$modnom));
-                             $virgule = ($nb_mod > $compteur) ? ',' : '';
+                             $mod_name = $DB->get_field($module,'name', array('id'=>$record->instance), $strictness=IGNORE_MISSING);
+                             $is_member = mymindmap_overview_ismember($rolecourse,$record);
+                             $counter++;
+                             $mod_name = addslashes(str_replace('"','-',$mod_name));
+                             $virgule = ($nb_mod > $counter) ? ',' : '';
                              if (file_exists($CFG->dirroot.'/mod/'.$module.'/pix/icon.gif'))
                                  $icon = '<img height="18" widht="18" style="margin-right:5px;" src="'.$CFG->wwwroot.'/mod/'.$module.'/pix/icon.gif" />';
                              else
                                  $icon = '<img height="18" width="18" style="margin-right:5px;" src="'.$CFG->wwwroot.'/mod/'.$module.'/pix/icon.png" />';
-                              if ($is_membre == 0)
+                              if ($is_member == 0)
                                  $content1 .= '
                                  {"id":"module'.$record->id.'-'.$newseq.'-'.$course->id.'-'.$i.'","topic":"'.addslashes($icon).'  '.
-                                 preg_replace("#\n|\t|\r#",'',$modnom).
+                                 preg_replace("#\n|\t|\r#",'',$mod_name).
                                  get_string('mymindmap_restriction','block_mymindmap_overview').'"}'.$virgule;
                              else
                                  $content1 .= '
                                  {"id":"module'.$record->id.'-'.$newseq.'-'.$course->id.'-'.$i.
                                  '","topic":"'.addslashes($icon).'  <a href=../mod/'.$module.'/view.php?id='.$record->id.' title=\''.
-                                 preg_replace("#\n|\t|\r#",'',str_replace("'"," ",$modnom)).'\'>'.
-                                 preg_replace("#\n|\t|\r#",'',$modnom).'</a>"}'.$virgule;
+                                 preg_replace("#\n|\t|\r#",'',str_replace("'"," ",$mod_name)).'\'>'.
+                                 preg_replace("#\n|\t|\r#",'',$mod_name).'</a>"}'.$virgule;
                          }
                      }
                    }
@@ -288,41 +215,12 @@ class block_mymindmap_overview extends block_base {
          ]}
          }';
          $content = str_replace('provisional',$opened_past,$content);
-         $hauteur = ($nbactual > 0) ? 450+($nbactual * 65) : 600;
-         $this->content->text .= html_writer::div('<div style="height:35px;">'.
-                    '<div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
-                    'onclick="$(document).ready(function(){'.
-                    '$(\'#jsmind_container\').toggle();'.
-                    '$(\'#jsmind_container\').html(\'\');'.
-                    '$(\'#jsmind_container\').css(\'height\',\''.$hauteur.'px\');'.
-                    'load_jsmind('.htmlentities($content).');});'.
-                    '$(\'#jsmind_container\').dragOn;"  title="'.
-                    get_string('mymindmap_howto','block_mymindmap_overview').'">'.
-                    get_string('mymindmap_openit','block_mymindmap_overview').'</div>'.
-                    '<div id="expander" class="btn btn-default" style="float:left;margin-left:20px;" '.
-                    'onclick="$(document).ready(function(){'.
-                    '$(\'#jsmind_container\').show();'.
-                    '$(\'#jsmind_container\').html(\'\');'.
-                    '$(\'#jsmind_container\').css(\'height\',\'1080px\');'.
-                    'expander('.htmlentities($content).');});'.
-                    '$(\'#jsmind_container\').dragOn;" title= "'.
-                    get_string('mymindmap_expand','block_mymindmap_overview').'">'.
-                    get_string('mymindmap_expand_all','block_mymindmap_overview').'</div>'.
-                    '<div id="collapser" class="btn btn-default" style="float:left;margin-left:20px;" '.
-                    'onclick="$(document).ready(function(){'.
-                    '$(\'#jsmind_container\').show();'.
-                    '$(\'#jsmind_container\').html(\'\');'.
-                    '$(\'#jsmind_container\').css(\'height\',\''.$hauteur.'px\');'.
-                    'collapse('.htmlentities($content).');});'.
-                    '$(\'#jsmind_container\').dragOn;" title= "'.
-                    get_string('mymindmap_collapse','block_mymindmap_overview').'">'.
-                    get_string('mymindmap_collapse_all','block_mymindmap_overview').'</div></div>'.
-                    '<div id="jsmind_container" style="display:none;" class="dragon"></div>');
+         $hight = ($nbactual > 0) ? 450+($nbactual * 65) : 600;
+         $this->content->text .= html_writer::div(mymindmap_overview_screenview ($content,$hight));
        }
        else
        {
-         $this->content->text = html_writer::div('<div style="height:35px;color:#FF0000;font-weight: bold;">'.
-                                get_string('mymindmap_nocourse', 'block_mymindmap_overview').'</div>');
+         $this->content->text = html_writer::div(mymindmap_overview_no_courses);
        }
        $this->content->footer = '';
        return $this->content;
