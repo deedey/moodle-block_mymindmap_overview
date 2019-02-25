@@ -157,6 +157,15 @@ defined('MOODLE_INTERNAL') || die();
       return $opened_course;
    }
 
+   function mymindmap_overview_coursemod_query($course){
+          global $DB;
+          $sql = 'SELECT * FROM mdl_course_modules as cm, mdl_modules as md WHERE ';
+          $sql .= 'md.id != cm.module AND md.name = "forum" AND cm.course = '.$course;
+          $myquery = $DB->get_recordset_sql($sql);
+          $nbr_items = count((array)$myquery);
+      return $nbr_items;
+   }
+
    function mymindmap_overview_mod_sections ($nb_modtot,$course,$modseq) {
        global  $DB;
        for ($a=0;$a < $nb_modtot; $a++)
