@@ -44,7 +44,6 @@ class block_mymindmap_overview extends block_base {
 
         $PAGE->requires->css('/blocks/mymindmap_overview/scripts/style/jsmind.css',true);
         $PAGE->requires->js('/lib/jquery/jquery-3.2.1.min.js',true);
-        //$PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jquery-3.2.1.min.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/drag-on.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.launcher.js',true);
@@ -65,7 +64,8 @@ class block_mymindmap_overview extends block_base {
           $opened_course = mymindmap_overview_last_course();
           foreach ($courses as $course)
           {
-             $nbcmod = $DB->count_records_select('course_modules','module != 9 AND course = '.$course->id, array ('course'=>$course->id));
+              //this is mandatory in order to make a comparison at the end of the cycle
+             $nbcmod = mymindmap_overview_coursemod_query($course->id);
              if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
                   $totactual++;
              elseif ($course->enddate < time() && $course->enddate > 0 && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
@@ -73,7 +73,7 @@ class block_mymindmap_overview extends block_base {
           }
           foreach ($courses as $course)
           {
-            $nbcmod = $DB->count_records_select('course_modules','module != 9 AND course = '.$course->id, array ('course'=>$course->id));
+             $nbcmod = mymindmap_overview_coursemod_query($course->id);
              if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
              {
                   $nbactual++;
