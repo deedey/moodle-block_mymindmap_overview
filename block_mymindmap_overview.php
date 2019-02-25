@@ -43,7 +43,7 @@ class block_mymindmap_overview extends block_base {
         }
 
         $PAGE->requires->css('/blocks/mymindmap_overview/scripts/style/jsmind.css',true);
-        $PAGE->requires->js('/lib/jquery/jquery-3.2.1.min.js',true);
+        $PAGE->requires->jquery();
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/drag-on.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.js',true);
         $PAGE->requires->js('/blocks/mymindmap_overview/scripts/js/jsmind.launcher.js',true);
