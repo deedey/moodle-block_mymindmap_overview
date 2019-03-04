@@ -19,19 +19,19 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$string['pluginname'] = 'Carte heuristique de mes cours';
-$string['mymindmap_overview'] = 'Carte heuristique de mes cours';
+$string['pluginname'] = 'Carte mentale de mes cours';
+$string['mymindmap_overview'] = 'Carte mentale de mes cours';
 $string['mymindmap_overview:addinstance'] = 'Ajouter un block Mymindmap_overview';
 $string['mymindmap_nocourse'] = 'Vous n\'avez actuellement aucun cours ou les cours que vous avez sont vides de contenu';
-$string['mymindmap_openit'] = 'Ouvrir/Fermer la carte heuristique de mes cours';
+$string['mymindmap_openit'] = 'Ouvrir/Fermer la carte mentale de mes cours';
 $string['mymindmap_howto'] = 'Pour naviguer ais&#233ment dans la carte, cliquer sur le bouton gauche et d&#233placez le curseur';
-$string['mymindmap_expand'] = 'Tout d&#233ployer implique une plus grande carte heuristique navigable';
+$string['mymindmap_expand'] = 'Tout d&#233ployer implique une plus grande carte mentale navigable';
 $string['mymindmap_expand_all'] = 'Tout d&#233ployer';
 $string['mymindmap_collapse'] = 'Réduire la mindmap permet une meilleure navigation au sein de vos cours';
 $string['mymindmap_collapse_all'] = 'Tout r&#233duire';
 $string['mymindmap_warning'] = 'Attention! Ce module ne contient encore aucune ressource.';
 $string['mymindmap_withoutname'] = 'Section sans titre';
 $string['mymindmap_restriction'] = ' *** Restreinte';
-$string['mymindmap_mine'] = 'Modules en cours';
-$string['mymindmap_past'] = 'Modules Pass&#233s';
+$string['mymindmap_mine'] = 'Cours actuels';
+$string['mymindmap_past'] = 'Cours Pass&#233s';
 $string['privacy:metadata'] = 'Le plugin block_mymindmap_overview ne conserve aucune donn&#233e personnelle.';
