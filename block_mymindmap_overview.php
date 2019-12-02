@@ -64,8 +64,8 @@ class block_mymindmap_overview extends block_base {
           $opened_course = mymindmap_overview_last_course();
           foreach ($courses as $course)
           {
-              //this is mandatory in order to make a comparison at the end of the cycle
-             $nbcmod = mymindmap_overview_coursemod_query($course->id);
+             $rolecourse = mymindmap_overview_my_role_course($course);
+             $nbcmod = mymindmap_overview_coursemod_query($course);
              if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
                   $totactual++;
              elseif ($course->enddate < time() && $course->enddate > 0 && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
@@ -73,7 +73,8 @@ class block_mymindmap_overview extends block_base {
           }
           foreach ($courses as $course)
           {
-             $nbcmod = mymindmap_overview_coursemod_query($course->id);
+             $rolecourse = mymindmap_overview_my_role_course($course);
+             $nbcmod = mymindmap_overview_coursemod_query($course);
              if (($course->enddate > time() || $course->enddate == 0) && $course->startdate < time() && $course->visible == 1 && ($nbcmod > 0 || $course->format == 'social'))
              {
                   $nbactual++;
@@ -87,9 +88,8 @@ class block_mymindmap_overview extends block_base {
                   $is_actual = 0;
                   $is_passed = 1;
              }
-            if ($nbcmod == 0 && $course->format != 'social')
+            if ($nbcmod == 0 && $course->format != 'social' && $rolecourse == 0)
                 continue;
-            $rolecourse = mymindmap_overview_my_role_course($course);
             $numcourse++;
             if ($course->visible == 0)
             {
@@ -106,7 +106,12 @@ class block_mymindmap_overview extends block_base {
 
             $idcourse = (!empty($course->idnumber)) ? $course->idnumber : $course->fullname;
             $nb_modules = (($nbcmod > 0 || $course->format == 'social') && $course->format != 'singleactivity') ? ($nbcmod + 1) : $nbcmod;
-            $the_course = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace('"',' - ',$course->fullname);
+            $warning = '<img height="22" widht="22" style="margin-right:5px;" src="'.$CFG->wwwroot.'/blocks/mymindmap_overview/images/warning.png" title="'.
+                       get_string('mymindmap_warning','block_mymindmap_overview').'" />';
+            if ($nb_modules == 0)
+               $the_course = $warning.str_replace('"',' - ',$course->fullname);
+            else
+               $the_course = '<span style="font-weight:bold;">('.$nb_modules.')</span>  '.str_replace('"',' - ',$course->fullname);//'<span style="font-weight:bold;">('.$nb_modules.')</span>  ';
             $content1 = '
             {"id":"'.$idcourse.'","topic":"<a href='.
             '../course/view.php?id='.$course->id.' title=\"'.
