@@ -91,10 +91,11 @@ defined('MOODLE_INTERNAL') || die();
    }
 
    function mymindmap_overview_my_role_course ($course) {
-          global $USER ;
-           if (user_has_role_assignment($USER->id, 1) ||
-                user_has_role_assignment($USER->id, 3) ||
-                user_has_role_assignment($USER->id, 4))
+           global $CFG,$USER ;
+           $coursecontext = context_course::instance($course->id);
+           if (user_has_role_assignment($USER->id, 1,$coursecontext->id) ||
+              user_has_role_assignment($USER->id, 3,$coursecontext->id) ||
+              user_has_role_assignment($USER->id, 4,$coursecontext->id))
                 $rolecourse = 1;
             else
                 $rolecourse = 0;
