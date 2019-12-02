@@ -160,10 +160,7 @@ defined('MOODLE_INTERNAL') || die();
 
    function mymindmap_overview_coursemod_query($course){
           global $DB;
-          $sql = 'SELECT * FROM mdl_course_modules as cm, mdl_modules as md WHERE ';
-          $sql .= 'md.id != cm.module AND md.name = "forum" AND cm.course = '.$course;
-          $myquery = $DB->get_recordset_sql($sql);
-          $nbr_items = count((array)$myquery);
+          $nbr_items = $DB->count_records_select('course_modules','module != 9 AND course = '.$course->id, array ('course'=>$course->id));
       return $nbr_items;
    }
 
