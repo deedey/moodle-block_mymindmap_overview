@@ -104,7 +104,8 @@ defined('MOODLE_INTERNAL') || die();
 
    function mymindmap_overview_screenview ($content,$hight) {
          $my_buttons = '<div style="height:35px;">'.
-         '<div id="mindmap" class="btn btn-default" style="clear:both;float:left;" '.
+         '<div id="mindmap" class="btn btn-default" '.
+         'style="clear:both;float:left;cursor:pointer !important;" '.
          'onclick="$(document).ready(function(){'.
          '$(\'#jsmind_container\').toggle();'.
          '$(\'#jsmind_container\').html(\'\');'.
@@ -113,7 +114,8 @@ defined('MOODLE_INTERNAL') || die();
          '$(\'#jsmind_container\').dragOn;"  title="'.
          get_string('mymindmap_howto','block_mymindmap_overview').'">'.
          get_string('mymindmap_openit','block_mymindmap_overview').'</div>'.
-         '<div id="expander" class="btn btn-default" style="float:left;margin-left:20px;" '.
+         '<div id="expander" class="btn btn-default" '.
+         'style="float:left;margin-left:20px;cursor:pointer !important;" '.
          'onclick="$(document).ready(function(){'.
          '$(\'#jsmind_container\').show();'.
          '$(\'#jsmind_container\').html(\'\');'.
@@ -122,7 +124,8 @@ defined('MOODLE_INTERNAL') || die();
          '$(\'#jsmind_container\').dragOn;" title= "'.
          get_string('mymindmap_expand','block_mymindmap_overview').'">'.
          get_string('mymindmap_expand_all','block_mymindmap_overview').'</div>'.
-         '<div id="collapser" class="btn btn-default" style="float:left;margin-left:20px;" '.
+         '<div id="collapser" class="btn btn-default" '.
+         'style="float:left;margin-left:20px;cursor:pointer !important;" '.
          'onclick="$(document).ready(function(){'.
          '$(\'#jsmind_container\').show();'.
          '$(\'#jsmind_container\').html(\'\');'.
