@@ -102,8 +102,8 @@ defined('MOODLE_INTERNAL') || die();
             return $rolecourse;
    }
 
-   function mymindmap_overview_screenview ($content,$hight) {
-         $my_buttons = '<div id="MyMindmap"><div style="height:35px;">'.
+  function mymindmap_overview_screenview ($content,$hight) {
+         $my_buttons = '<div style="height:35px;">'.
          '<div id="mindmap" class="btn btn-default" '.
          'style="clear:both;float:left;cursor:pointer !important;" '.
          'onclick="$(document).ready(function(){'.
@@ -133,10 +133,8 @@ defined('MOODLE_INTERNAL') || die();
          'collapse('.htmlentities($content).');});'.
          '$(\'#jsmind_container\').dragOn;" title= "'.
          get_string('mymindmap_collapse','block_mymindmap_overview').'">'.
-         get_string('mymindmap_collapse_all','block_mymindmap_overview').'</div>'.
-         '</div>'.
-         '<div id="jsmind_container" style="display:block;" class="dragon"></div></div>'.
-         '<div id="mon_container" style="display:none;">'.htmlentities(str_replace("\'","'",$content)).'</div>';
+         get_string('mymindmap_collapse_all','block_mymindmap_overview').'</div></div>'.
+         '<div id="jsmind_container" style="display:none;" class="dragon"></div>';
        return $my_buttons;
    }
 
