@@ -239,7 +239,7 @@ class block_mymindmap_overview extends block_base {
                    }
                    $newidseq++;
                    $newseq++;
-                   if ($nbr_seq > $newseq)
+                   if ($nbr_seq > $newseq && $nb_mod > 0)
                       $content1 .= '
                       ]},';
                    elseif ($nbr_seq == $newseq)
