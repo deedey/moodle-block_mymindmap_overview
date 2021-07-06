@@ -23,8 +23,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->release = '1.3.4 (Build: 2021042700)';
-$plugin->version   = 2021042700;
+$plugin->release = '1.3.5 (Build: 2021070600)';
+$plugin->version   = 2021070600;
 $plugin->requires  = 2015102300;
 $plugin->component = 'block_mymindmap_overview';
 $plugin->maturity = MATURITY_STABLE;
