@@ -13,3 +13,9 @@ This view also shows how many modules constitute a course or section, which allo
 This plugin uses jsmind javascript tool to design the schemas. You can find it here:
 
 https://github.com/hizzgdev/jsmind
+
+There are some slowdowns due to searching the logs table for each student and each course needed to show the red flag.
+
+To avoid this, you can replace the "block_mymindmap_overview" file with the "block_mymindmap_overview-without-flags" file by removing the "-without-flags" extension.
+
+In this version, all calls to the "logs" table to control access to new activities are avoided in order to speed up the display of the mindmap 
