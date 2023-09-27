@@ -284,7 +284,7 @@ class block_mymindmap_overview extends block_base {
         }
         else
         {
-          $this->content->text = html_writer::div(mymindmap_overview_no_courses);
+          $this->content->text = html_writer::div(mymindmap_overview_no_courses());
         }
         $this->content->footer = '';
         return $this->content;
